@@ -2,7 +2,7 @@
 ################################################################################
 #    &&&....&&&    % BioMed 2023: Learning R Course in Summer of 2023                       #
 #  &&&&&&..&&&&&&  % Teacher: Bo Li, Mingwei Liu                               #
-#  &&&&&&&&&&&&&&  % Date: Jul. 18th, 2023                                     #
+#  &&&&&&&&&&&&&&  % Date: Jul. 20th, 2023                                     #
 #   &&&&&&&&&&&&   %                                                           #
 #     &&&&&&&&     % Environment: R version 4.2.3;                             #
 #       &&&&       % Platform: x86_64-w64-mingw32/x64 (64-bit)                 #
@@ -56,8 +56,13 @@
 # For windows, work directory. 
 
 pri.dir <- getwd()
+pri.dir
+print(pri.dir)
 
-setwd("D:/00-GitHub/LRCv2.0/tmp/") # setting the working directory. 
+cat(pri.dir)
+
+cat(paste("\n", pri.dir, sep = ""))
+
 
 ### End of Step-02.
 ### ****************************************************************************
@@ -100,9 +105,15 @@ map_for_province <- function(x) {
 }
 
 map_for_province("sichuan")
+map_for_province("chongqing")
+
+# http://localhost:21840/session/ID_20230720210227_1005639.html
 
 ### End of Step-04.
 ### ****************************************************************************
+
+
+x <- 1:10
 
 
 ################################################################################
