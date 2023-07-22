@@ -92,6 +92,7 @@ print(myString)
 ### Step-04. Using R as a calculator. 
 
 if (!require(REmap)) {
+  if (!require(devtools)) install.packages("devtools")
   library(devtools)
   install_github("lchiffon/REmap")
 } 
@@ -111,10 +112,6 @@ map_for_province("chongqing")
 
 ### End of Step-04.
 ### ****************************************************************************
-
-
-x <- 1:10
-
 
 ################################################################################
 ### End of chunk-01.

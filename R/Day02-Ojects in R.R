@@ -1,0 +1,188 @@
+
+################################################################################
+#    &&&....&&&    % BioMed 2023: Learning R Course in Summer of 2023                       #
+#  &&&&&&..&&&&&&  % Teacher: Bo Li, Mingwei Liu                               #
+#  &&&&&&&&&&&&&&  % Date: Jul. 22th, 2023                                     #
+#   &&&&&&&&&&&&   %                                                           #
+#     &&&&&&&&     % Environment: R version 4.2.3;                             #
+#       &&&&       % Platform: x86_64-w64-mingw32/x64 (64-bit)                 #
+#        &         %                                                           #
+################################################################################
+
+################################################################################
+### code chunk number 03: Understanding the data objects and their structure.
+################################################################################
+
+### ****************************************************************************
+### Step-01. Common data objects in our life. 
+
+# 1) Number or values in R
+
+v1 <- seq(from = 0, to = 5, by = 0.3)
+print(v1)
+
+v2 <- rnorm(100)
+
+# 2) Text in R
+
+t1 <- letters
+
+t2 <- "I am a Chinese"
+
+t3 <- c("Chongqing", "Wuhan", "Chengdu")
+
+# 3) Image in R
+
+# if (!require(EBImage)) BiocManager::install("EBImage")
+
+library(EBImage)
+
+img <- readImage("data/raw data/Rlogo.png")
+display(img, method="raster")
+print(img)
+str(img)
+
+img <- readImage("data/raw data/2007.jpg")
+display(img, method="raster")
+colorMode(img) = Grayscale
+display(img, all=TRUE)
+
+img <- readImage("data/raw data/CQNU.png")
+display(img, method="raster")
+colorMode(img) = Grayscale
+display(img, all=TRUE)
+colorMode(img) = Color
+display(img, all=TRUE)
+
+img@.Data[100, 50, ]
+
+img@.Data[, , 1][img@.Data[, , 1] > 0.9] <- 0.000019
+img@.Data[, , 2][img@.Data[, , 1] > 0.9] <- 0.988888
+
+
+display(img, all=TRUE)
+
+# 4) Audio in R
+
+library(tuneR)
+
+aud <- readWave('data/raw data/mixkit-running-water-1323.wav')
+
+print(aud)
+
+tuneR::play(aud)
+
+plot(aud)
+
+sound1 <- Wave(left=sample(-32768:32767, size=44100*5, replace=TRUE))
+tuneR::play(sound1)
+
+sound2 <- Wave(left=sample(-32768:32767, size=44100*5, replace=TRUE),
+               right=sample(-3276:3276, size=44100*5, replace=TRUE))
+tuneR::play(sound2)
+
+# 5) Video in R
+
+library(av)
+file <- "D:/new_dir/Emeishan_yuege.mp4"
+av_media_info(file)
+
+# Extracting the audio
+av_audio_convert(file, 'D:/new_dir/short.mp3', total_time = 60)
+tuneR::play("D:/new_dir/short.mp3")
+
+# Splitting a video file in a set of image files.
+av_video_images("data/raw data/R and RStudio.mp4", "D:/new_dir/")
+
+
+
+makeplot <- function() {
+    datalist <- split(gapminder, gapminder$year) 
+    lapply(datalist, function(data) {
+        p <- ggplot(data, aes(gdpPercap, lifeExp, size = pop, color = continent)) + 
+          scale_size("population", limits = range(gapminder$pop)) + geom_point() + ylim(20, 90) + 
+          scale_x_log10(limits = range(gapminder$gdpPercap)) + ggtitle(data$year) + theme_classic() 
+        print(p)
+      })
+  }
+
+# Play 1plot per sec, and use an interpolation filter to convert into 10 fps 
+video_file1 <- file.path("D:/new_dir/",'output1.mp4') 
+av_capture_graphics(makeplot(),
+                    video_file1,
+                    1280,
+                    720,
+                    res = 144,
+                    vfilter = 'framerate=fps=10') 
+
+video_file2 <- file.path("D:/new_dir/",'output2.mp4') 
+av_capture_graphics(makeplot(),
+                    video_file2,
+                    1280,
+                    720,
+                    res = 144,
+                    vfilter = 'framerate=fps=10',
+                    audio = "D:/new_dir/short.mp3")
+
+av::av_media_info(video_file) 
+# utils::browseURL(video_file)
+### End of Step-01.
+### ****************************************************************************
+
+### ****************************************************************************
+### Step-02. About working directory in R. 
+
+# For windows, work directory. 
+
+### End of Step-02.
+### ****************************************************************************
+
+### ****************************************************************************
+### Step-02. About working directory in R. 
+
+# For windows, work directory. 
+
+# 查看R所有包的存放目录
+.libPaths() 
+
+### End of Step-02.
+### ****************************************************************************
+
+### ****************************************************************************
+### Step-03. Edit the first script in R. 
+
+myString <- "Hello, World!"
+
+print(myString)
+
+### End of Step-03.
+### ****************************************************************************
+
+### ****************************************************************************
+### Step-04. Using R as a calculator. 
+
+if (!require(REmap)) {
+  if (!require(devtools)) install.packages("devtools")
+  library(devtools)
+  install_github("lchiffon/REmap")
+} 
+
+library(REmap)
+map_for_province <- function(x) {
+  data <- data.frame(country = mapNames(x), 
+                     value = 5 * sample(length(mapCList[[x]])) + 200)
+  out <- remapC(data, maptype = x, color = "skyblue")
+  return(out)
+}
+
+map_for_province("sichuan")
+map_for_province("chongqing")
+
+# http://localhost:21840/session/ID_20230720210227_1005639.html
+
+### End of Step-04.
+### ****************************************************************************
+
+################################################################################
+### End of chunk-01.
+################################################################################
