@@ -20,45 +20,72 @@
 
 v1 <- seq(from = 0, to = 5, by = 0.3)
 print(v1)
+length(v1)
 
-v2 <- rnorm(100)
+is.character(v1)
+is.numeric(v1)
+
+v2 <- rnorm(100) # randomly
+print(v2)
+hist(v2)
+mean(v2)
+sd(v2)
 
 # 2) Text in R
 
 t1 <- letters
+t2 <- LETTERS
+is.character(t1)
+is.numeric(t2)
 
-t2 <- "I am a Chinese"
+t3 <- "I am a Chinese"
+print(t3)
 
-t3 <- c("Chongqing", "Wuhan", "Chengdu")
+t4 <- c("Chongqing", "Wuhan", "Chengdu")
+is.character(t4)
+
+class(t4)
 
 # 3) Image in R
 
 # if (!require(EBImage)) BiocManager::install("EBImage")
 
-library(EBImage)
+library(png)
+file <- readPNG("data/raw data/CQNU.png")
+is.numeric(file)
+class(file)
+dim(file)
 
+library(EBImage)
 img <- readImage("data/raw data/Rlogo.png")
+is.numeric(img)
 display(img, method="raster")
 print(img)
-str(img)
+str(img) # check the structure 
 
 img <- readImage("data/raw data/2007.jpg")
 display(img, method="raster")
-colorMode(img) = Grayscale
-display(img, all=TRUE)
+colorMode(img) <- Grayscale
+print(img)
+display(img, method="raster")
 
 img <- readImage("data/raw data/CQNU.png")
 display(img, method="raster")
-colorMode(img) = Grayscale
-display(img, all=TRUE)
-colorMode(img) = Color
-display(img, all=TRUE)
+print(img)
 
-img@.Data[100, 50, ]
+str(img)
+
+dim(img@.Data)
+img@.Data[1:20, 1:20, 1]
+img@.Data[, , 1]
+
+library(DT)
+datatable(img@.Data[, , 1])
 
 img@.Data[, , 1][img@.Data[, , 1] > 0.9] <- 0.000019
-img@.Data[, , 2][img@.Data[, , 1] > 0.9] <- 0.988888
+display(img)
 
+img@.Data[, , 2][img@.Data[, , 1] == 0.000019] <- 0.988888
 
 display(img, all=TRUE)
 
@@ -66,7 +93,7 @@ display(img, all=TRUE)
 
 library(tuneR)
 
-aud <- readWave('data/raw data/mixkit-running-water-1323.wav')
+aud <- readWave('data/raw data/Running-water-1323.wav')
 
 print(aud)
 
@@ -88,14 +115,14 @@ file <- "D:/new_dir/Emeishan_yuege.mp4"
 av_media_info(file)
 
 # Extracting the audio
-av_audio_convert(file, 'D:/new_dir/short.mp3', total_time = 60)
-tuneR::play("D:/new_dir/short.mp3")
+av_audio_convert(file, 'D:/new_dir/music.mp3', total_time = 60)
+tuneR::play("D:/new_dir/music.mp3")
 
 # Splitting a video file in a set of image files.
-av_video_images("data/raw data/R and RStudio.mp4", "D:/new_dir/")
+dir.create("images_from_mp4")
+av_video_images(file, "D:/new_dir/images_from_mp4/")
 
-
-
+library(ggplot2)
 makeplot <- function() {
     datalist <- split(gapminder, gapminder$year) 
     lapply(datalist, function(data) {
@@ -104,10 +131,10 @@ makeplot <- function() {
           scale_x_log10(limits = range(gapminder$gdpPercap)) + ggtitle(data$year) + theme_classic() 
         print(p)
       })
-  }
+}
 
 # Play 1plot per sec, and use an interpolation filter to convert into 10 fps 
-video_file1 <- file.path("D:/new_dir/",'output1.mp4') 
+video_file1 <- file.path("D:/new_dir/",'new_file1.mp4') 
 av_capture_graphics(makeplot(),
                     video_file1,
                     1280,
@@ -130,9 +157,29 @@ av::av_media_info(video_file)
 ### ****************************************************************************
 
 ### ****************************************************************************
-### Step-02. About working directory in R. 
+### Step-02. About vector in R. 
 
-# For windows, work directory. 
+x <- 6
+
+x <- 1:10
+
+seq()
+c()
+-10:100
+rnorm(100, mean = 0, sd = 1)
+
+x <- c(1, 0.5, -5, 10)
+
+length(x)
+
+names(x)
+
+names(x) <- letters[1:4]
+
+print(x)
+
+x[2]
+x["b"]
 
 ### End of Step-02.
 ### ****************************************************************************
