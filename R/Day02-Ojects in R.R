@@ -187,52 +187,6 @@ x["b"]
 ### End of Step-02.
 ### ****************************************************************************
 
-### ****************************************************************************
-### Step-02. About working directory in R. 
-
-# For windows, work directory. 
-
-# 查看R所有包的存放目录
-.libPaths() 
-
-### End of Step-02.
-### ****************************************************************************
-
-### ****************************************************************************
-### Step-03. Edit the first script in R. 
-
-myString <- "Hello, World!"
-
-print(myString)
-
-### End of Step-03.
-### ****************************************************************************
-
-### ****************************************************************************
-### Step-04. Using R as a calculator. 
-
-if (!require(REmap)) {
-  if (!require(devtools)) install.packages("devtools")
-  library(devtools)
-  install_github("lchiffon/REmap")
-} 
-
-library(REmap)
-map_for_province <- function(x) {
-  data <- data.frame(country = mapNames(x), 
-                     value = 5 * sample(length(mapCList[[x]])) + 200)
-  out <- remapC(data, maptype = x, color = "skyblue")
-  return(out)
-}
-
-map_for_province("sichuan")
-map_for_province("chongqing")
-
-# http://localhost:21840/session/ID_20230720210227_1005639.html
-
-### End of Step-04.
-### ****************************************************************************
-
 ################################################################################
 ### End of chunk-01.
 ################################################################################
