@@ -123,6 +123,7 @@ dir.create("images_from_mp4")
 av_video_images(file, "D:/new_dir/images_from_mp4/")
 
 library(ggplot2)
+library(gapminder)
 makeplot <- function() {
     datalist <- split(gapminder, gapminder$year) 
     lapply(datalist, function(data) {
@@ -134,7 +135,7 @@ makeplot <- function() {
 }
 
 # Play 1plot per sec, and use an interpolation filter to convert into 10 fps 
-video_file1 <- file.path("D:/new_dir/",'new_file1.mp4') 
+video_file1 <- file.path("D:/new_dir/",'new_video.mp4') 
 av_capture_graphics(makeplot(),
                     video_file1,
                     1280,
@@ -142,16 +143,18 @@ av_capture_graphics(makeplot(),
                     res = 144,
                     vfilter = 'framerate=fps=10') 
 
-video_file2 <- file.path("D:/new_dir/",'output2.mp4') 
+video_file2 <- file.path("D:/new_dir/",'new_music.mp4') 
 av_capture_graphics(makeplot(),
                     video_file2,
                     1280,
                     720,
                     res = 144,
                     vfilter = 'framerate=fps=10',
-                    audio = "D:/new_dir/short.mp3")
+                    audio = "D:/new_dir/music.mp3")
 
-av::av_media_info(video_file) 
+av::av_media_info(video_file)
+tuneR::play("D:/new_dir/new_music.mp4")
+
 # utils::browseURL(video_file)
 ### End of Step-01.
 ### ****************************************************************************
