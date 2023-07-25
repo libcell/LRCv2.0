@@ -164,8 +164,7 @@ x <- rnorm(100, 10, 2)
 hist(x, freq=FALSE, main=expression(N(0,2^2)))
 curve(dnorm(x, 10, 2), 4, 16, lwd=2, col="red", add=TRUE)
 
-# 2) using the negative integer
-
+# 正态分布随机数
 muv <- c(10, 10, 20)
 sdv <- c(1, 2, 1)
 np <- 200
@@ -176,7 +175,30 @@ for(j in 1:3){
 }
 matplot(x, ym, type="l", lwd=2, xlab="x", ylab="f(x)", main="Normal Densities")
 
-### End of Step-04.
+# 2) 二项分布随机数
+par(mfrow=c(1,3))
+p=0.25
+for( n in c(10,20,50)) { 
+  x=rbinom(100,n,p)
+  hist(x,prob=T,main=paste("n =",n))
+  xvals=0:n
+  points(xvals,dbinom(xvals,n,p),type="h",lwd=3)
+}
+par(mfrow=c(1,1))
+
+### End of Step-05.
+### ****************************************************************************
+
+### ****************************************************************************
+### Step-06. Some cases for vector in R. 
+
+# 1) Student-t test. 
+
+# 2) Conditional plotting. 
+# 
+
+
+### End of Step-05.
 ### ****************************************************************************
 
 
