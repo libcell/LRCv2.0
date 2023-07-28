@@ -45,7 +45,8 @@ cbind(mat1.data, 1:3)
 cbind(mat1.data, 1:4)
 cbind(1:9, 1:5)
 
-# dim(), nrow() & ncol()
+# 3) Checking the dimension of a matrix, using dim(), nrow() & ncol(). 
+
 dim(mat5)
 mat5
 nrow(mat5)
