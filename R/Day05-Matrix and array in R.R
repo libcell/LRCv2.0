@@ -67,6 +67,8 @@ y
 
 x
 
+# 4) Checking the names of a matrix. 
+
 # rownames()
 rownames(x) <- c("row-1", "row-2")
 x
@@ -104,6 +106,8 @@ let[3, ] <- c("chongqing", "chengdu")
 mat6 <- (mat5 > 10)
 is.matrix(mat6)
 
+### End of Step-01.
+### ****************************************************************************
 
 vec <- 1:36
 vec <- array(vec, dim = c(3, 3, 4))
