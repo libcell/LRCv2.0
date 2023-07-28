@@ -2,7 +2,7 @@
 ################################################################################
 #    &&&....&&&    % BioMed 2023: Learning R Course in Summer of 2023                       #
 #  &&&&&&..&&&&&&  % Teacher: Bo Li, Mingwei Liu                               #
-#  &&&&&&&&&&&&&&  % Date: Jul. 25th, 2023                                     #
+#  &&&&&&&&&&&&&&  % Date: Jul. 27th, 2023                                     #
 #   &&&&&&&&&&&&   %                                                           #
 #     &&&&&&&&     % Environment: R version 4.2.3;                             #
 #       &&&&       % Platform: x86_64-w64-mingw32/x64 (64-bit)                 #
@@ -14,9 +14,9 @@
 ################################################################################
 
 ### ****************************************************************************
-### 
+### Step-1. Matrix in R
 
-# 1) 1st method for constructing matrix
+# 1) The 1st method for constructing matrix, using matrix(). 
 
 mat1.data <- c(1, 2, 3, 4, 5, 6, 7, 8, 9)
 mat1 <- matrix(mat1.data, nrow = 3, ncol = 3)
@@ -30,7 +30,7 @@ mat2.data <- 10:18
 mat3 <- matrix(mat2.data, ncol = 3)
 mat3
 
-# 2) rbind() and cbind()
+# 2) The 2nd method for constructing matrix, using rbind() or cbind(). 
 
 mat1.data
 mat2.data
