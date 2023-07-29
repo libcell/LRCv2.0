@@ -20,36 +20,102 @@
 
 # a) Using list(). 
 
+x <- list(2, 
+          LETTERS, 
+          1:5, 
+          c(FALSE, FALSE, FALSE, TRUE, TRUE))
+
+print(x)
+
+str(x)
+
 # b) Using c().
+
+x1 <- list(10:15)
+print(x1)
+class(x1)
+
+x2 <- c(x, x1)
+print(x2)
+
+x3 <- c(x, 10:15)
+print(x3)
+
+x4 <- unlist(x3)
+
 # c() function can combine two or more lists into one as well.
 
 # 2) How to Name R List’s Components?
 
+x
+length(x)
+str(x)
+names(x)
+x[[2]][1]
+
+names(x) <- c("WH", "CQ", "CD", "BJ")
+x
+
+x$WH; x$CQ
 
 # 3) Indexing a List. 
 
-# a) Using logical vectors:
+x
+
+# a) Using logical vectors: extracting sub-list
+
+length(x)
+x[[1]]
+x[1]
+
+a <- x[[2]]
+b <- x[2]
+a == b
+class(a)
+class(b)
+
+x[c(TRUE, FALSE, TRUE, FALSE)]
 
 # b) Using positive integers:
 
+x[c(1, 3)]
+
 # c) Using negative integers:
 
+x[-c(2, 4)]
+
 # d) Using character vectors for named lists:
+
+x[c("WH", "CD")]
 
 # 4) How to Manipulate list in R?
 
 # a) Modifying a component:
 
+x[[1]] <- 5
+x[[1]][2] <- 4
+x
+
+x[[1]] <- rnorm(10)
+x
+
 # b) Adding a new component:
+
+x$GZ <- iris
+x
 
 # c) Deleting a component:
 
+x$GZ <- NULL
+x
 
 ### End of Step-01.
 ### ****************************************************************************
 
 ### ****************************************************************************
 ### Step-2. apply() in R
+
+
 ### End of Step-02.
 ### ****************************************************************************
 
