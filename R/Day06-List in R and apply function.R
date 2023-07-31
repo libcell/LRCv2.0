@@ -115,12 +115,57 @@ x
 ### ****************************************************************************
 ### Step-2. apply() in R
 
+myMatrix <- matrix(rnorm(200*100), 
+                   nrow = 200, 
+                   byrow = FALSE)
+dim(myMatrix)
+head(myMatrix)
+
+rownames(myMatrix) <- paste("gene", 1:200, sep = "-")
+colnames(myMatrix) <- paste("cell", 1:100, sep = "-")
+
+class(myMatrix)
+
+apply(myMatrix, 2, mean)
+apply(myMatrix, 2, max)
+apply(myMatrix, 2, sum)
+
+
+myMatrix <- matrix(rnorm(20000*1000), 
+                   nrow = 20000, 
+                   byrow = FALSE)
+
+system.time(
+  for (i in 1:20000) {
+    print(mean(myMatrix[i, ]))
+  }
+)
+
+system.time(
+  apply(myMatrix, 1, mean)
+)
 
 ### End of Step-02.
 ### ****************************************************************************
 
 ### ****************************************************************************
 ### Step-3. lapply() in R
+
+y <- c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
+sum(y)
+mean(y)
+
+x <- list(a = 1:10, beta = exp(-3:3), logic = c(TRUE,FALSE,FALSE,TRUE))
+print(x)
+
+# compute the list mean for each list element
+lapply(x, mean)
+lapply(x, median)
+lapply(x, print)
+
+# median and quartiles for each list element
+lapply(x, quantile, probs = 1:3/4)
+
 ### End of Step-03.
 ### ****************************************************************************
 
