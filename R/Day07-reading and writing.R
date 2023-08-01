@@ -2,7 +2,7 @@
 ################################################################################
 #    &&&....&&&    % BioMed 2023: Learning R Course in Summer of 2023                       #
 #  &&&&&&..&&&&&&  % Teacher: Bo Li, Mingwei Liu                               #
-#  &&&&&&&&&&&&&&  % Date: Jul. 29th, 2023                                     #
+#  &&&&&&&&&&&&&&  % Date: Aug. 1st, 2023                                      #
 #   &&&&&&&&&&&&   %                                                           #
 #     &&&&&&&&     % Environment: R version 4.2.3;                             #
 #       &&&&       % Platform: x86_64-w64-mingw32/x64 (64-bit)                 #
@@ -10,62 +10,35 @@
 ################################################################################
 
 ################################################################################
-### code chunk number 06: Understanding the data objects and their structure.
+### code chunk number 07: Reading and writing file in R.
 ################################################################################
 
 ### ****************************************************************************
-### Step-1. List in R
+### Step-1. Reading CSV Files. 
 
-# 1) How to Create Lists in R?
-
-# a) Using list(). 
-
-# b) Using c().
-
-# c() function can combine two or more lists into one as well.
-
-# 2) How to Name R List’s Components?
-
-# 3) Indexing a List. 
-
-# a) Using logical vectors: extracting sub-list
-
-# b) Using positive integers:
-
-# c) Using negative integers:
-
-# d) Using character vectors for named lists:
-
-# 4) How to Manipulate list in R?
-
-# a) Modifying a component:
-
-# b) Adding a new component:
-
-# c) Deleting a component:
 
 ### End of Step-01.
 ### ****************************************************************************
 
 ### ****************************************************************************
-### Step-2. apply() in R
+### Step-2. Reading XML Files
 
 ### End of Step-02.
 ### ****************************************************************************
 
 ### ****************************************************************************
-### Step-3. lapply() in R
+### Step-3. Reading JSON Files
 
 ### End of Step-03.
 ### ****************************************************************************
 
 ### ****************************************************************************
-### Step-4. sapply() in R
+### Step-4. Reading Excel Files
 ### End of Step-04.
 ### ****************************************************************************
 
 ### ****************************************************************************
-### Step-5. tapply() in R
+### Step-5. Reading HTML Tables
 ### End of Step-05.
 ### ****************************************************************************
 
