@@ -19,23 +19,38 @@
 
 # 1) 模拟10000行（10000个基因），100列（100个样本）的基因表达矩阵。
 
-chip.data<-matrix(rnorm(10000*100,mean=0),nrow=10000,ncol=100)
-diff.index<-sample(1:1000,1000)
+chip.data <- matrix(rnorm(10000*100, mean=0), nrow=10000, ncol=100)
+dim(chip.data)
+head(chip.data)
+rownames(chip.data) <- paste("gene", 1:10000, sep = "-")
+colnames(chip.data) <- paste("sample", 1:100, sep = "-")
+colnames(chip.data)[1:50] <- paste("healthy", 1:50, sep = "-")
+colnames(chip.data)[51:100] <- paste("patient", 1:50, sep = "-")
+head(chip.data)
 
 # 2) 在10000个基因中，假定有100个基因在两组间存在差异，前50个上调，另50个下调；
-chip.data[diff.index[1:50],1:10]<-rnorm(50*10,mean=2)
-chip.data[diff.index[1:50],1:10]<-rnorm(50*10,mean=-2)
+
+deg.index <- sample(1:10000, 100)
+deg.index
+chip.data[deg.index[1:50],1:50] <- chip.data[deg.index[1:50],1:50] - 10
+chip.data[deg.index[51:100],1:50] <- chip.data[deg.index[51:100],1:50] + 10
 
 # 3) PCA分析
 ## Default S3 method:
-chip.data<-princomp(chip.data)
+chip.data.pca <- princomp(chip.data)
 summary(chip.data)
+chip.data <- t(chip.data)
+chip.data <- chip.data[, 1:50]
+head(chip.data)
+chip.pca <- princomp(chip.data)
+chip.pca
+str(chip.pca)
+chip.pca$loadings
 # 4) 可视化
 colour<-c(rep(2,50),rep(7,50))
 library(rgl)
-plot3d(chip.data.pca$loadings[,1:3],col=colour,type="s",radius = 0.025)
+plot3d(chip.pca$loadings[,1:3],col=colour,type="s",radius = 0.025)
 plot3d(chip.data.pca$loadings[,1:3],col=colour,type="l",radius = 0.025)
-
 
 # (2) Alternatively, using pca3d package
 
@@ -44,15 +59,17 @@ library(pca3d)
 library(rgl)
 
 data(metabo)
-head(metabo)
-
+dim(metabo)
+metabo[1:6, 1:6]
+help(package = "pca3d")
 metabo.pca <- prcomp(metabo[,-1], scale.=TRUE)
-groups  <- factor(metabo[,1])
+groups <- factor(metabo[,1])
 
 summary(metabo.pca)
 
 pca3d(metabo.pca, group=groups, show.ellipses=TRUE, elle.ci=0.75, show.plane=FALSE)
-pca3d(metabo.pca, group=groups, show.ellipses=TRUE, ellipse.ci=0.75, show.plane=FALSE)
+pca3d(metabo.pca, group=groups, show.ellipses=TRUE)
+pca3d(metabo.pca, group=groups)
 
 ### End of Step-01.
 ### ****************************************************************************
@@ -63,48 +80,45 @@ pca3d(metabo.pca, group=groups, show.ellipses=TRUE, ellipse.ci=0.75, show.plane=
 
 # (1) The primary method
 
-x = iris[,-5]
-x2 = state.x77
+x <- iris[,-5]
 
 # 计算协方差
 cov(x$Sepal.Length,x$Petal.Length)
-#> [1] 1.274315
+
 cov(x)
 #>              Sepal.Length Sepal.Width Petal.Length Petal.Width
 #> Sepal.Length    0.6856935  -0.0424340    1.2743154   0.5162707
 #> Sepal.Width    -0.0424340   0.1899794   -0.3296564  -0.1216394
 #> Petal.Length    1.2743154  -0.3296564    3.1162779   1.2956094
 #> Petal.Width     0.5162707  -0.1216394    1.2956094   0.5810063
+
+heatmap(cov(x))
 pheatmap::pheatmap(cov(x))
 
 # 计算相关性系数（pearson是参数检验，另外两个为非参数检验。)
-cor(x$Sepal.Length,x$Petal.Length)
+cor(x$Sepal.Length,x$Petal.Length, method = "pearson")
 #> [1] 0.8717538
-cor(x$Sepal.Length,x$Petal.Length,method = "kendall")
+cor(x$Sepal.Length,x$Petal.Length, method = "kendall") # rank
 #> [1] 0.7185159
-cor(x$Sepal.Length,x$Petal.Length,method = "spearman")
-#> [1] 0.8818981
-#> 
-#> cor(x)
-#>              Sepal.Length Sepal.Width Petal.Length Petal.Width
-#> Sepal.Length    1.0000000  -0.1175698    0.8717538   0.8179411
-#> Sepal.Width    -0.1175698   1.0000000   -0.4284401  -0.3661259
-#> Petal.Length    0.8717538  -0.4284401    1.0000000   0.9628654
-#> Petal.Width     0.8179411  -0.3661259    0.9628654   1.0000000
+cor(x$Sepal.Length,x$Petal.Length, method = "spearman")
+
+cor(x)
+
 pheatmap::pheatmap(cor(x))
 
 cor.test(x$Sepal.Length,x$Petal.Lengt)
-cor.test(x$Sepal.Length,x$Petal.Length,method = "kendall")
+cor.test(x$Sepal.Length,x$Petal.Length, method = "kendall")
 
-cor.test(x$Sepal.Length,x$Petal.Length,method = "spearman")
+cor.test(x$Sepal.Length,x$Petal.Length, method = "spearman")
 
 # (2) The second method
 
 data(mtcars)
 str(mtcars)#简单看一下数据集
-cor(mtcars$disp,mtcars$hp)#简单看一下disp和hp两个变量的相关性
+cor(mtcars$disp, mtcars$hp)#简单看一下disp和hp两个变量的相关性
 
 corr<- cor(mtcars)#求所有变量的相关性
+corr
 library(corrplot)#加载所需要的包
 corrplot(corr)
 
@@ -178,7 +192,47 @@ corrplot(corData,
 ### ****************************************************************************
 ### Step-03 Clustering analysis.
 
-# (1) HCA
+# (1) HCA: 层次聚类分析
+
+small.iris <- iris[c(sample(1:50, 5), sample(51:100, 5), sample(101:150, 5)), ]
+small.iris
+
+x <- t(small.iris[, -5])
+
+corr <- cor(x)
+
+corrplot(corr, order = "AOE")
+
+plot(small.iris$Sepal.Length, small.iris$Sepal.Width, col = small.iris$Species, 
+     pch = 15)
+
+plot(small.iris$Sepal.Length, small.iris$Petal.Length, col = small.iris$Species, 
+     pch = 15)
+
+
+# dist
+
+?dist
+
+# 计算样本之间距离
+d.iris <- dist(small.iris[, -5], method = "binary")
+d.iris
+# 样本聚类 
+tree <- hclust(d.iris, method = "single")
+
+print(tree)
+# 聚类结果的可视化
+plot(tree)
+
+scaled.iris <- scale(small.iris[, -5])
+
+boxplot(small.iris[, -5], col = 2:5)
+
+boxplot(scaled.iris, col = 2:5)
+
+library(NbClust)
+nc <- NbClust(scaled.iris, distance="euclidean", 
+              min.nc=2, max.nc=10, method="average")
 
 # 1) 数据预处理
 
@@ -227,6 +281,10 @@ table(clusters)
 plot(fit.average, hang=-1, cex=.8,  
      main="Average Linkage Clustering\n5 Cluster Solution")
 rect.hclust(fit.average, k=5)
+
+# (3) k-means
+
+
 
 ### End of Step-03.
 ### ****************************************************************************
