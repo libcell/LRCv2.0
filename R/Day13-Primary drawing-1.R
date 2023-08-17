@@ -13,22 +13,13 @@
 ################################################################################
 
 ### ****************************************************************************
-### Step-01. Checking the data quality. 
+### Step-01. Histogram. 
 
 rownames(VADeaths)
 
 barplot(VADeaths, beside = TRUE) # for matrix
 
 barplot(1:10) # for numeric vector
-
-
-v <- 1:10
-boxplot(v)
-r <- iris[, 1:4]
-class(r)
-boxplot(iris[, 1:4], notch = TRUE, horizontal = TRUE)
-# barplot(as.matrix(r))
-
 
 # 1) the first histogram
 
@@ -95,11 +86,11 @@ hist(
              80, 100, 140)
 )
 
-### End of Step-03.
+### End of Step-01.
 ### ****************************************************************************
 
 ### ****************************************************************************
-### Step-04. The bar chart. 
+### Step-02. The bar chart. 
 
 # 1) the first one
 
@@ -194,11 +185,11 @@ barplot(
 # Add the legend to the chart
 legend("topleft", regions, cex = 0.7, fill = colors)
 
-### End of Step-04.
+### End of Step-02.
 ### ****************************************************************************
 
 ### ****************************************************************************
-### Step-05. The pie diagram.   
+### Step-03. The pie diagram.   
 
 # 1) the first one.
 
@@ -272,11 +263,11 @@ barplot(piepercent,
         names.arg = labels1, 
         col = rainbow(length(geeks)))
 
-### End of Step-05.
+### End of Step-03.
 ### ****************************************************************************
 
 ### ****************************************************************************
-### Step-06. The layout of diagrams. 
+### Step-04. The layout of diagrams. 
 
 # 1) using notch parameter. 
 iris
@@ -305,8 +296,12 @@ boxplot(Sepal.Length ~ Species,
 
 par(op) # or, using: par(no.readonly = TRUE)
 
-### End of Step-06.
+### End of Step-04.
 ### ****************************************************************************
+
+### ****************************************************************************
+### Step-05. The curve plot. 
+
 
 ################################################################################
 ### End of chunk-13.
