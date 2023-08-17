@@ -314,7 +314,7 @@ par(op) # or, using: par(no.readonly = TRUE)
 
 # curve()
 
-curve(sin, from = -pi, to = pi)
+
 curve(cos, from = -pi, to = pi)
 curve(log, from = 0, to = 1000)
 curve(log10, from = 0, to = 1000)
@@ -324,6 +324,9 @@ curve(exp, from = 0, to = 1000)
 curve(x^2, -10, 10)
 text(0, 20, "y=x^2", col = "red", cex = 1.2)
 
+curve(sin, from = -pi, to = pi)
+abline(-0.3, 0.2)
+locator()
 ### End of Step-04.
 ### ****************************************************************************
 
