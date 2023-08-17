@@ -13,68 +13,7 @@
 ################################################################################
 
 ### ****************************************************************************
-### Step-01. Batch processing in R.
-
-# (1) Using apply() and other functions from apply family. 
-
-# define a function: y = x^2
-
-y <- function(x) {
-  return(x^2)
-}
-
-system.time({
-  res <- lapply(1:5000000, y)
-})
-
-# (2) Parallel Computing in R.
-# 1) Using parallel package
-
-library(parallel)
-
-clnum <- detectCores()
-
-cl <- makeCluster(getOption("cl.cores", clnum))
-
-cl
-
-system.time({
-  res <- parLapply(cl, 1:5000000, y)
-})
-
-stopCluster(cl)
-
-# 2) using foreach package. 
-
-# 导入 foreach 包
-library(foreach)
-
-# 创建一个需要并行计算的任务，例如计算一组数字的平方和
-numbers <- 1:5000000
-
-# 设置并行计算的参数，这里使用 "doParallel" 和 4 个处理器核心
-library(doParallel)
-registerDoParallel(cores = 4)
-
-# 使用 foreach 循环并行计算
-system.time({
-  result <- foreach(i = numbers) %dopar% {
-    # 在每个迭代中执行的任务
-    i^2
-  }
-})
-
-# 结果是一个向量，包含了每个数字的平方
-print(result)
-
-# 关闭之前建立的集群
-stopImplicitCluster()
-
-### End of Step-01.
-### ****************************************************************************
-
-### ****************************************************************************
-### Step-02. Loop in R. 
+### Step-01. Loop in R. 
 
 # A. for ... 
 
@@ -182,84 +121,25 @@ for ( i in v) {
   print(i)
 }
 
+### End of Step-01.
+### ****************************************************************************
+
+### ****************************************************************************
+### Step-02 Defining the specific function in R.
+
+# (1) Defining the function by yourself
+
+# eg-1
+
+# (2) The function with parameter value
+
+# (3) The lazy function
+
+# (4) The embedded function
+
 ### End of Step-02.
 ### ****************************************************************************
 
-### ****************************************************************************
-### Step-03 Conditional branch statement.
-
-# (1) if ...
-
-# eg-1
-
-x <- 50L
-if (is.integer(x)) {
-  print("X 是一个整数")
-}
-
-# (2) if ... else ...
-
-# eg-1
-
-x <- c("google", "runoob", "taobao")
-
-if ("Runoob" %in% x) {
-  print("x 包含 Runoob")
-} else {
-  print("x 不包含 Runoob")
-}
-
-# eg-2
-
-x <- c("google", "runoob", "taobao")
-
-if ("weibo" %in% x) {
-  print("第一个 if 包含 weibo")
-} else if ("runoob" %in% x) {
-  print("第二个 if 包含 runoob")
-} else {
-  print("没有找到")
-}
-
-# (3) switch
-
-# eg-1
-x <- switch(
-  3,
-  "google",
-  "runoob",
-  "taobao",
-  "weibo"
-)
-print(x)
-
-# eg-2
-you.like <- "runoob"
-switch(you.like, 
-       google = "www.google.com", 
-       runoob = "www.runoob.com", 
-       taobao = "www.taobao.com")
-
-
-# 
-
-x <- seq(-2*pi, 2*pi, by = pi/10)
-y <- sin(x)
-
-
-# the first method to define the color sequence
-col.seq2 <- ifelse(x <= 0 & y <= 0, "red", "black")
-
-# the second one
-col.seq <- rep("black", length(y))
-col.seq[x <= 0 & y <= 0] <- "red"
-col.seq
-plot(x, y, pch = 15, col = col.seq2)
-
-
-### End of Step-03.
-### ****************************************************************************
-
 ################################################################################
-### End of chunk-11.
+### End of chunk-12.
 ################################################################################
