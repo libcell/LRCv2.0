@@ -28,12 +28,14 @@ v <- c(19, 23, 11, 5, 16, 21, 32, 14, 19, 27, 39)
 
 # Create the histogram.
 hist(v, 
-     xlab = "No.of Articles", 
-     col = "green",
+     xlab = "No. of Articles", 
+     ylab = "Count", 
+     col = rainbow(10),
      border = "black", 
      xlim = c(0, 50),
-     ylim = c(0, 5), 
-     breaks = 10)
+     ylim = c(0, 4), 
+     breaks = 10, 
+     main = "Article Count Histogram")
 
 hist(v, 
      xlab = "No.of Articles", 
@@ -62,10 +64,16 @@ m <- hist(
 
 class(m)
 print(m)
-# plot(m)
+
+plot(m)
+
+# 高级绘图函数， such as boxplot()
+# 低级绘图函数，such as text()
 
 # Setting labels
-text(m$mids, m$counts, labels = m$counts,
+text(m$mids, m$counts, labels = m$counts, col = 2,
+     adj = c(0.5, -0.5))
+text(m$mids, m$counts + 0.5, labels = LETTERS[1:6], col = 2,
      adj = c(0.5, -0.5))
 
 # 3) the third one
@@ -194,7 +202,7 @@ legend("topleft", regions, cex = 0.7, fill = colors)
 # 1) the first one.
 
 # Create data for the graph.
-geeks<- c(23, 56, 20, 63)
+geeks <- c(23, 56, 20, 63)
 labels <- c("Mumbai", "Pune", "Chennai", "Bangalore")
 
 # Plot the chart.
@@ -219,7 +227,7 @@ pie(geeks,
 geeks <- c(23, 56, 20, 63)
 labels <- c("Mumbai", "Pune", "Chennai", "Bangalore")
 
-piepercent <- round(100 * geeks / sum(geeks), 1)
+piepercent <- paste0(round(100 * geeks / sum(geeks), 1), "%")
 
 # Plot the chart.
 pie(geeks,
@@ -229,7 +237,7 @@ pie(geeks,
 legend(
   "topright",
   c("Mumbai", "Pune", "Chennai", "Bangalore"),
-  cex = 0.5,
+  cex = 1.0,
   fill = rainbow(length(geeks))
 )
 
@@ -294,6 +302,8 @@ boxplot(Sepal.Length ~ Species,
         col = 2:5, 
         notch = TRUE) # 3
 
+pie(1:5)
+
 par(op) # or, using: par(no.readonly = TRUE)
 
 ### End of Step-04.
@@ -302,6 +312,20 @@ par(op) # or, using: par(no.readonly = TRUE)
 ### ****************************************************************************
 ### Step-05. The curve plot. 
 
+# curve()
+
+curve(sin, from = -pi, to = pi)
+curve(cos, from = -pi, to = pi)
+curve(log, from = 0, to = 1000)
+curve(log10, from = 0, to = 1000)
+curve(log2, from = 0, to = 1000)
+curve(exp, from = 0, to = 1000)
+
+curve(x^2, -10, 10)
+text(0, 20, "y=x^2", col = "red", cex = 1.2)
+
+### End of Step-04.
+### ****************************************************************************
 
 ################################################################################
 ### End of chunk-13.
