@@ -15,6 +15,21 @@
 ### ****************************************************************************
 ### Step-01. Checking the data quality. 
 
+rownames(VADeaths)
+
+barplot(VADeaths, beside = TRUE) # for matrix
+
+barplot(1:10) # for numeric vector
+
+
+v <- 1:10
+boxplot(v)
+r <- iris[, 1:4]
+class(r)
+boxplot(iris[, 1:4], notch = TRUE, horizontal = TRUE)
+# barplot(as.matrix(r))
+
+
 # 1) the first histogram
 
 # Create data for the graph.
