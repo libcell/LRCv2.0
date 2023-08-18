@@ -314,7 +314,6 @@ par(op) # or, using: par(no.readonly = TRUE)
 
 # curve()
 
-
 curve(cos, from = -pi, to = pi)
 curve(log, from = 0, to = 1000)
 curve(log10, from = 0, to = 1000)
