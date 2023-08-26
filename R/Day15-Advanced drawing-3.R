@@ -14,11 +14,8 @@
 
 ### ****************************************************************************
 ### Step-01. About working directory in R. 
-
-# For windows, work directory. 
-
+# Showing work directory. 
 pri.dir <- getwd()
-
 ### End of Step-01.
 ### ****************************************************************************
 
@@ -26,10 +23,10 @@ pri.dir <- getwd()
 ### Step-02. Case-1. 
 
 library(ggplot2)
-p <- ggplot(data=mpg, mapping=aes(x=cty, y=hwy)) #第一层，画布
+p <- ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) #第一层，画布
 p + geom_point() #第二层，画散点图
 
-p <-ggplot(mpg, aes(x=cty, y=hwy, color=factor(year)))
+p <-ggplot(mpg, aes(x = cty, y = hwy, color = factor(year)))
 p + geom_point()
 
 ### End of Step-02.
