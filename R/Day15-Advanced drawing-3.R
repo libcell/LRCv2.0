@@ -24,9 +24,11 @@ pri.dir <- getwd()
 
 library(ggplot2)
 p <- ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) #第一层，画布
+print(p)
 p + geom_point() #第二层，画散点图
 
 p <-ggplot(mpg, aes(x = cty, y = hwy, color = factor(year)))
+p
 p + geom_point()
 
 ### End of Step-02.
@@ -36,6 +38,7 @@ p + geom_point()
 ### Step-03. Case-3 
 
 p <- ggplot(mpg, aes(x = cty, y = hwy, color = factor(year), size = displ))
+p
 p + geom_point()
 
 ### End of Step-03.
@@ -45,21 +48,28 @@ p + geom_point()
 ### Step-04. Case-4 
 
 p <- ggplot(data = mpg, mapping = aes(x = cty, y = hwy))
+p
 p <- p + geom_point(aes(colour = factor(year), size = displ))
+p
 p <- p + stat_smooth()
+p
 p + scale_color_manual(values = c('blue2', 'red4'))  #增加标度
 
 ### End of Step-04.
 ### ****************************************************************************
 
-
 ### ****************************************************************************
 ### Step-05. Case-5 
 p <- ggplot(data = mpg, mapping = aes(x = cty, y = hwy))
+p
 p <- p + geom_point(aes(colour = class, size = displ))
+p
 p <- p + stat_smooth()
+p
 p <- p + geom_point(aes(colour = factor(year), size = displ))
+p
 p <- p + scale_size_continuous(range = c(4, 10))  #增加标度
+p
 p + facet_wrap( ~ year, ncol = 1)     #分面
 ### End of Step-05.
 ### ****************************************************************************
@@ -110,7 +120,7 @@ p <- ggplot(mpg, aes(class2, fill = factor(year)))   #分组填充
 p + geom_bar(position = 'stack', alpha = 0.5)   #叠加条形图
 
 p <- ggplot(mpg, aes(class2, fill = factor(year)))   #分组填充
-p  + geom_bar(position = 'fill', alpha = 0.5)
+p  + geom_bar(position = 'fill', alpha = 0.8)
 
 ### End of Step-08.
 ### ****************************************************************************
@@ -148,11 +158,11 @@ m  # Print the map
 ### Step-11. %>% in magrittr package.
 # v1
 set.seed(123)
-n1<-rnorm(10000)        
-n2<-abs(n1)*50        
-n3<-matrix(n2,ncol = 100) 
-n4<-round(rowMeans(n3))
-hist(n4%%7)
+n1 <- rnorm(10000)
+n2 <- abs(n1) * 50
+n3 <- matrix(n2, ncol = 100)
+n4 <- round(rowMeans(n3))
+hist(n4 %% 7)
 
 # v2
 library(magrittr)
