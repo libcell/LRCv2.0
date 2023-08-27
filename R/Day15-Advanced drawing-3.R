@@ -146,9 +146,9 @@ library(leaflet)
 
 m <- leaflet() %>%
   addTiles() %>%  # Add default OpenStreetMap map tiles
-  addMarkers(lng = 174.768,
-             lat = -36.852,
-             popup = "The birthplace of R")
+  addMarkers(lng = 106.29965,
+             lat = 29.61440,
+             popup = "\u2605CIBG")
 m  # Print the map
 
 ### End of Step-10.
