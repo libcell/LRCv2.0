@@ -9,33 +9,98 @@
 ################################################################################
 
 ################################################################################
-### code chunk number 16: Advanced drawing in R.
+### code chunk number 16: RNA-seq data analysis in R.
 ################################################################################
 
+### ****************************************************************************
+### Step-01. Specify the path where the fastq files are stored. 
+
+### Specify the path. 
 fastq.dir <- system.file(package = "ShortRead", "extdata/E-MTAB-1147")
+files <- list.files(fastq.dir, "fastq.gz", full.names=TRUE)
 
-##quality check on sequencing reads
-#预准备确定文件具体位置
+### End of Step-01.
+### ****************************************************************************
 
+### ****************************************************************************
+### Step-02. Perform quality checks with the Rqc package 
 
+### Runing QC
 library(Rqc)
-qcRes <- rqc(path = dirPath, pattern = ".fastq.gz", openBrowser = FALSE)
+qcRes <- rqc(path = fastq.dir, 
+             pattern = ".fastq.gz", 
+             outdir = "report", 
+             openBrowser = FALSE)
 
-#得到html报告：'C:\Users\Administrator\AppData\Local\Temp\
-#RtmpM5vw6e/rqc_report.html' has been created.
+### Showing input files
+knitr::kable(perFileInformation(qcRes))
 
-#B 利用对应的函数得到报告中对应的数据
-# 1.获取单碱基测序的质量报告，帮助考虑是否Trim得分低于20的reads，
-#也能帮助检测是否存在接头污染
+### End of Step-02.
+### ****************************************************************************
+
+### ****************************************************************************
+### Step-03. Extract the related checking score from QC report. 
+
+### Per Read Mean Quality Distribution of Files
+rqcReadQualityBoxPlot(qcRes)
+
+### Average Quality
+rqcReadQualityPlot(qcRes)
+
+### Cycle-specific Average Quality
+rqcCycleAverageQualityPlot(qcRes)
+
+### Read Frequency
+rqcReadFrequencyPlot(qcRes)
+
+### Heatmap of top represented reads
+rqcFileHeatmap(qcRes[[1]])
+
+### Read Length Distribution
+rqcReadWidthPlot(qcRes)
+
+### Cycle-specific GC Content
+rqcCycleGCPlot(qcRes)
+
+### Cycle-specific Quality Distribution
+rqcCycleQualityPlot(qcRes)
+
+### PCA Biplot (cycle-specific read average quality)
+rqcCycleAverageQualityPcaPlot(qcRes)
+
+### Cycle-specific Quality Distribution - Boxplot
 rqcCycleQualityBoxPlot(qcRes)
 
-# 2.获取每个位置核苷酸碱基的百分比的图像
+### Cycle-specific Base Call Proportion
+rqcCycleBaseCallsPlot(qcRes)
 rqcCycleBaseCallsLinePlot(qcRes)
 
-#D  检查FASTQ文件中不同重复层次的百分比，一般的reads只复制一次
-rqcReadFrequencyPlot(qcRes)
-#   获取GC含量图像
-rqcCycleGCPlot(qcRes)
+### End of Step-03.
+### ****************************************************************************
+
+### ****************************************************************************
+### Step-04. Generating report after QC running. 
+
+### Processing files
+qa <- rqcQA(files, workers=1)
+
+### Generating report
+reportFile <- rqcReport(qa)
+browseURL(reportFile)
+
+### End of Step-04.
+### ****************************************************************************
+
+### ****************************************************************************
+### Step-05. Perform quality checks with the ShortRead package. 
+
+library(ShortRead)
+qa <- ShortRead::qa(fastq.dir, "fastq.gz", BPPARAM=SerialParam())
+browseURL(report(qa))
+
+
+
+
 
 
 ##较为广泛进行测序质量控制的工具为FASTQC，R中使用fastqcr
@@ -47,18 +112,18 @@ library(fastqcr)
 
 assignInNamespace(".check_if_unix", .check_if_unix, ns = "fastqcr")
 
-wsl.exe /path_to_wsl_fastqc_install/fastqc
-
-fastqcr::fastqc("fastq_path", fastqc.path = "wsl.exe /path_to_wsl_fastqc_install/fastqc")
-
 #安装fastqcr相关的java工具
 fastqc_install()
 
 #获取处理后的结果并将其放在对应的文件夹中(新创一个叫results的文件夹)
-fastqc(fq.dir=dirPath,qc.dir="fastqc_results")
+fastqcr::fastqc(fq.dir = fastq.dir, qc.dir = "fastqc_results", 
+                fastqc.path = "C:/Program Files/FastQC/run_fastqc.bat")
+
+fastqcr::fastqc(fq.dir = fastq.dir, qc.dir = "fastqc_results",  
+                fastqc.path = "wsl.exe C:/Program Files/FastQC/run_fastqc.bat")
 
 #进行fastqc分析，读取已处理的报告
-qc_report(qc.path="fastqc_results",
+qc_report(qc.path = "fastqc_results",
           result.file = "reportFile",preview = TRUE)
 
 qc <- qc_read("fastqc_results/ERRbs127302_1_suet.fastq.gz")
@@ -89,7 +154,7 @@ preprocessReads(fastqFiles,outfiles,nBases = 1,
 
 
 
-####利用ShortRead函数进行数据处理：读取一个fastq文件，并过滤每个质量分数低于20的读数。
+#### 利用ShortRead函数进行数据处理：读取一个fastq文件，并过滤每个质量分数低于20的读数。
 library(ShortRead)
 #A 读取fastq文件
 fastqFile <-system.file(package = "ShortRead",
@@ -101,24 +166,26 @@ fq <- readFastq(fastqFile)
 fq
 
 #C  利用矩阵得到每个碱基的质量得分
-qPerBase = as(quality(fq), "matrix")
+qPerBase <- as(quality(fq), "matrix")
 qPerBase
+dim(qPerBase)
+DT::datatable(qPerBase)
 #D  获取碱基质量得分<20的数量
-qcount = rowSums(qPerBase <= 20)
+qcount <- rowSums(qPerBase <= 20)
 qcount
 #E  得到菲尔德质量评分>=20的reads 数量
 fq[qcount == 0]
 
-#F  读写出每个碱基中所有read得分高于20的fastq 文件
+#F  读写出每个碱基中所有read得分高于20的fastq文件
 writeFastq(fq[qcount == 0],
            paste(fastqFile, "Qfiltered", sep="_"))
 
 #G  fastq文件很大，常用的方法是通过片段化逐条读取
 ## set up streaming with block size 1000，帮助我们顺利读取片段化的reads
-f <- FastqStreamer(fastqFile,readerBlockSize=1000)
+f <- FastqStreamer(fastqFile, readerBlockSize = 1000)
 f
 
-while(length(fq <- yield(f))) {
+while (length(fq <- yield(f))) {
   qPerBase = as(quality(fq), "matrix")
   qcount = rowSums( qPerBase <= 20)
   writeFastq(fq[qcount == 0],
