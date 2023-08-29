@@ -16,8 +16,10 @@
 ### Step-01. Specify the path where the fastq files are stored. 
 
 ### Specify the path. 
-fastq.dir <- system.file(package = "ShortRead", "extdata/E-MTAB-1147")
-files <- list.files(fastq.dir, "fastq.gz", full.names=TRUE)
+#. fastq.dir <- system.file(package = "ShortRead", "extdata/E-MTAB-1147")
+#. files <- list.files(fastq.dir, "fastq.gz", full.names=TRUE)
+
+fastq.dir <- "data/E-MTAB-1147"
 
 ### End of Step-01.
 ### ****************************************************************************
@@ -82,10 +84,11 @@ rqcCycleBaseCallsLinePlot(qcRes)
 ### Step-04. Generating report after QC running. 
 
 ### Processing files
-qa <- rqcQA(files, workers=1)
+files <- list.files(fastq.dir, "fastq.gz", full.names=TRUE)
+qaRpt <- rqcQA(files, workers=1)
 
 ### Generating report
-reportFile <- rqcReport(qa)
+reportFile <- rqcReport(qaRpt)
 browseURL(reportFile)
 
 ### End of Step-04.
@@ -94,128 +97,118 @@ browseURL(reportFile)
 ### ****************************************************************************
 ### Step-05. Perform quality checks with the ShortRead package. 
 
+### -------------------- The first usage, one-by-one ----------------------- ###
+
 library(ShortRead)
-qa <- ShortRead::qa(fastq.dir, "fastq.gz", BPPARAM=SerialParam())
+qa <- qa(fastq.dir, "fastq.gz", BPPARAM=SerialParam())
 browseURL(report(qa))
 
+### -------------------- The second usage, one-by-one ---------------------- ###
 
+#### 读取一个fastq文件，并过滤每个质量分数低于20的读数。
 
-
-
-
-##较为广泛进行测序质量控制的工具为FASTQC，R中使用fastqcr
-library(fastqcr)
-#由于不是mac linux系统，所以需进行操作，让fastqcr用于windows系统：
-.check_if_unix <<- function() {
-  return(NULL)
-}
-
-assignInNamespace(".check_if_unix", .check_if_unix, ns = "fastqcr")
-
-#安装fastqcr相关的java工具
-fastqc_install()
-
-#获取处理后的结果并将其放在对应的文件夹中(新创一个叫results的文件夹)
-fastqcr::fastqc(fq.dir = fastq.dir, qc.dir = "fastqc_results", 
-                fastqc.path = "C:/Program Files/FastQC/run_fastqc.bat")
-
-fastqcr::fastqc(fq.dir = fastq.dir, qc.dir = "fastqc_results",  
-                fastqc.path = "wsl.exe C:/Program Files/FastQC/run_fastqc.bat")
-
-#进行fastqc分析，读取已处理的报告
-qc_report(qc.path = "fastqc_results",
-          result.file = "reportFile",preview = TRUE)
-
-qc <- qc_read("fastqc_results/ERRbs127302_1_suet.fastq.gz")
-qc
-
-qc_plot(qc,"Per base sequence quality")
-
-
-
-
-#####过滤、去除reads
-library(QuasR)
-#获取fastq 文件的路径
-fastqFiles <- system.file(package = "ShortRead",
-                          "extdata/E-MTAB-1147",
-                          c("ERR127302_1_subset.fastq.gz",
-                            "ERR127302_2_subset.fastq.gz"))
-#
-outfiles <- paste(tempfile(pattern=c("processed_1_","processed_2_")),
-                  ".fastq",sep="")
-print(outfiles)
-preprocessReads(fastqFiles,outfiles,nBases = 1,
-                truncateStartBases = 3,
-                Lpattern = "ACCCGGGA",
-                minLength = 40)
-#报错 找不到处理过的数据文件，并且最后进行过滤也报错。
-
-
-
-
-#### 利用ShortRead函数进行数据处理：读取一个fastq文件，并过滤每个质量分数低于20的读数。
+# 1) Getting all files in fastq format.
 library(ShortRead)
-#A 读取fastq文件
-fastqFile <-system.file(package = "ShortRead",
-                        "extdata/E-MTAB-1147",
-                        "ERR127302_1_subset.fastq.gz") 
+fqs <- list.files("data/E-MTAB-1147")
+fastqFile <- paste("data/E-MTAB-1147", fqs, sep = "/")
 
-#B 读取fastq file
-fq <- readFastq(fastqFile)
-fq
-
-#C  利用矩阵得到每个碱基的质量得分
-qPerBase <- as(quality(fq), "matrix")
-qPerBase
-dim(qPerBase)
-DT::datatable(qPerBase)
-#D  获取碱基质量得分<20的数量
-qcount <- rowSums(qPerBase <= 20)
-qcount
-#E  得到菲尔德质量评分>=20的reads 数量
-fq[qcount == 0]
-
-#F  读写出每个碱基中所有read得分高于20的fastq文件
-writeFastq(fq[qcount == 0],
-           paste(fastqFile, "Qfiltered", sep="_"))
-
-#G  fastq文件很大，常用的方法是通过片段化逐条读取
-## set up streaming with block size 1000，帮助我们顺利读取片段化的reads
-f <- FastqStreamer(fastqFile, readerBlockSize = 1000)
-f
-
-while (length(fq <- yield(f))) {
-  qPerBase = as(quality(fq), "matrix")
-  qcount = rowSums( qPerBase <= 20)
-  writeFastq(fq[qcount == 0],
-             paste(fastqFile, "Qfiltered", sep="_"),
-             mode="a")
+# 2) Filtering low-quality reads. 
+for (i in 1:length(fqs)) {
+  fq.file <- fastqFile[i]
+  qualified.fq.file <- paste0("data/E-MTAB-1147/", 
+                             "qualified_", fqs[i])
+  fq <- readFastq(fq.file)
+  fq
+  
+  # 3) Obtaining the quality score for each fastq file. 
+  qPerBase <- as(quality(fq), "matrix")
+  qPerBase
+  dim(qPerBase)
+  # DT::datatable(qPerBase)
+  
+  # 4) Count the number of bases with a quality score <20
+  qcount <- rowSums(qPerBase <= 20)
+  qcount
+  
+  # 5) Extract reads with Field quality score >= 20
+  qualified.reads <- fq[qcount == 0]
+  
+  # 6) Rewrite reads with each-base-score > 20 into a new fastq file
+  writeFastq(object = qualified.reads, file = qualified.fq.file, 
+             mode="w", full=FALSE, compress=TRUE)
 }
-#将ShortRead每一步的过程合起来，设置While循环，调用yield()来遍历所有片段化文件。
-#去除<20 reads的基因。
 
+### End of Step-05.
+### ****************************************************************************
 
+### ****************************************************************************
+### Step-06. Perform quality checks with the ShortRead package. 
 
+### 1) Preparing the fastq, genome and annotation files -------------------- ###
 
-####映射Mapping/aligning reads to the genome举例
 library(QuasR)
+file.copy(system.file(package = "QuasR", "extdata"), ".", recursive = TRUE)
 
-#A  复制示例的数据到当前的工作目录路径
-#文件本身在QuasR包中，从C:/program file放至当前目录dirPath中
-file.copy(system.file(package="QuasR", "extdata"),
-          ".", recursive=TRUE)
-
-#B  从文件中打开hg19sub.fa并命名
-genomeFile <- "extdata/hg19sub.fa"
-
-#C  样本文件中包含了实例名称和fastq文件路径
+### Offering the index of fastq files. 
 sampleFile <- "extdata/samples_chip_single.txt"
 
-#D  
-proj <- qAlign(sampleFile, genomeFile)
+### Offering the file path of genome sequence file in fasta format.
+genomeFile <- "extdata/hg19sub.fa"
+
+### 2) Mapping / aligning reads to genome ---------------------------------- ###
+
+### Alignment was carried out. 
+proj <- qAlign(sampleFile, genomeFile, splicedAlignment = FALSE)
 proj
+alignmentStats(proj)
+qQCReport(proj, "extdata/qc_report.pdf")
+
+### 3) Mapping and quantifying gene expression levels ---------------------- ###
+
+### Preparing all files. 
+sampleFile <- "extdata/samples_chip_single.txt"
+auxFile <- "extdata/auxiliaries.txt"
+genomeFile <- "extdata/hg19sub.fa"
+
+### Mapping reads to genome.
+proj1 <- qAlign(sampleFile, genome = genomeFile, auxiliaryFile = auxFile)
+
+### Checking the genome information.
+library(GenomicFeatures)
+annotFile <- "extdata/hg19sub_annotation.gtf"
+chrLen <- scanFaIndex(genomeFile)
+chrominfo <- data.frame(chrom = as.character(seqnames(chrLen)),
+                        length = width(chrLen),
+                        is_circular = rep(FALSE, length(chrLen)))
+
+### We first create a TxDb object from a .gtf file with gene annotation.
+txdb <- makeTxDbFromGFF(file = annotFile, format = "gtf",
+                        chrominfo = chrominfo,
+                        dataSource = "Ensembl",
+                        organism = "Homo sapiens")
+txdb
 
 
+### With the promoters function, we can then create the GRanges object with regions to be quantified. 
+### Finally, because most genes consist of multiple overlapping transcripts, we select the first transcript for each gene
+promReg <- promoters(txdb, upstream = 1000, downstream = 500,
+                     columns = c("gene_id","tx_id"))
+gnId <- vapply(mcols(promReg)$gene_id,
+               FUN = paste, FUN.VALUE = "",
+               collapse = ",")
+promRegSel <- promReg[match(unique(gnId), gnId)]
+names(promRegSel) <- unique(gnId)
+promRegSel
 
+### Using promRegSel object as query, we can now count the alignment per sample in each of the promoter windows.
+cnt <- qCount(proj1, promRegSel)
+
+### Quantification of gene and exon expression
+geneLevels <- qCount(proj, txdb, reportLevel = "gene")
+exonLevels <- qCount(proj, txdb, reportLevel = "exon")
+
+### Calculation of RPKM expression values
+geneRPKM <- t(t(geneLevels[,-1] / geneLevels[,1] * 1000)
+              / colSums(geneLevels[,-1]) * 1e6)
+geneRPKM
 
