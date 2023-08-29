@@ -1,0 +1,8 @@
+[1] "Executing bowtie on DESKTOP-R1NLQ79 using 1 cores. Parameters:"
+[1] "\"D:/00-Github/LRCv2.0/extdata/NC_001422.1.fa.Rbowtie/bowtieIndex\" \"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\RtmpOS4JxV\\chip_1_1_3594d263d84.bam23281dbd51bbfastq\" -m 1 --best --strata --phred33-quals -S -p 1 \"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\RtmpOS4JxV\\chip_1_1.fq.bz22328168356e8.sam\""
+[1] "Converting sam file to sorted bam file on DESKTOP-R1NLQ79 : C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\RtmpOS4JxV\\chip_1_1.fq.bz22328168356e8.sam"
+[1] "Auxiliary alignments 1 for sample 1 (Sample1) have been successfully created on DESKTOP-R1NLQ79"
+[1] "Executing bowtie on DESKTOP-R1NLQ79 using 1 cores. Parameters:"
+[1] "\"D:/00-Github/LRCv2.0/extdata/NC_001422.1.fa.Rbowtie/bowtieIndex\" \"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\RtmpOS4JxV\\chip_2_1_359476521003.bam23284061e5cfastq\" -m 1 --best --strata --phred33-quals -S -p 1 \"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\RtmpOS4JxV\\chip_2_1.fq.bz2232879fd3c43.sam\""
+[1] "Converting sam file to sorted bam file on DESKTOP-R1NLQ79 : C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\RtmpOS4JxV\\chip_2_1.fq.bz2232879fd3c43.sam"
+[1] "Auxiliary alignments 1 for sample 2 (Sample2) have been successfully created on DESKTOP-R1NLQ79"

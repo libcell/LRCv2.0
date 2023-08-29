@@ -27,7 +27,7 @@ fastq.dir <- "data/E-MTAB-1147"
 ### ****************************************************************************
 ### Step-02. Perform quality checks with the Rqc package 
 
-### Runing QC
+### Runing QC (Quality Control for RNA-seq raw data)
 library(Rqc)
 qcRes <- rqc(path = fastq.dir, 
              pattern = ".fastq.gz", 
@@ -135,14 +135,14 @@ for (i in 1:length(fqs)) {
   
   # 6) Rewrite reads with each-base-score > 20 into a new fastq file
   writeFastq(object = qualified.reads, file = qualified.fq.file, 
-             mode="w", full=FALSE, compress=TRUE)
+             mode = "w", full=FALSE, compress=TRUE)
 }
 
 ### End of Step-05.
 ### ****************************************************************************
 
 ### ****************************************************************************
-### Step-06. Perform quality checks with the ShortRead package. 
+### Step-06. Perform read mapping genome. 
 
 ### 1) Preparing the fastq, genome and annotation files -------------------- ###
 
@@ -172,7 +172,7 @@ genomeFile <- "extdata/hg19sub.fa"
 
 ### Mapping reads to genome.
 proj1 <- qAlign(sampleFile, genome = genomeFile, auxiliaryFile = auxFile)
-?qAlign
+
 ### Checking the genome information.
 library(GenomicFeatures)
 annotFile <- "extdata/hg19sub_annotation.gtf"
@@ -201,7 +201,8 @@ promRegSel
 
 ### Using promRegSel object as query, we can now count the alignment per sample in each of the promoter windows.
 cnt <- qCount(proj1, promRegSel)
-?qCount
+# ?qCount
+
 ### Quantification of gene and exon expression
 geneLevels <- qCount(proj, txdb, reportLevel = "gene")
 exonLevels <- qCount(proj, txdb, reportLevel = "exon")
