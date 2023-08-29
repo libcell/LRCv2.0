@@ -172,7 +172,7 @@ genomeFile <- "extdata/hg19sub.fa"
 
 ### Mapping reads to genome.
 proj1 <- qAlign(sampleFile, genome = genomeFile, auxiliaryFile = auxFile)
-
+?qAlign
 ### Checking the genome information.
 library(GenomicFeatures)
 annotFile <- "extdata/hg19sub_annotation.gtf"
@@ -188,7 +188,6 @@ txdb <- makeTxDbFromGFF(file = annotFile, format = "gtf",
                         organism = "Homo sapiens")
 txdb
 
-
 ### With the promoters function, we can then create the GRanges object with regions to be quantified. 
 ### Finally, because most genes consist of multiple overlapping transcripts, we select the first transcript for each gene
 promReg <- promoters(txdb, upstream = 1000, downstream = 500,
@@ -202,7 +201,7 @@ promRegSel
 
 ### Using promRegSel object as query, we can now count the alignment per sample in each of the promoter windows.
 cnt <- qCount(proj1, promRegSel)
-
+?qCount
 ### Quantification of gene and exon expression
 geneLevels <- qCount(proj, txdb, reportLevel = "gene")
 exonLevels <- qCount(proj, txdb, reportLevel = "exon")
@@ -212,3 +211,5 @@ geneRPKM <- t(t(geneLevels[,-1] / geneLevels[,1] * 1000)
               / colSums(geneLevels[,-1]) * 1e6)
 geneRPKM
 
+### End of Step-06.
+### ****************************************************************************
